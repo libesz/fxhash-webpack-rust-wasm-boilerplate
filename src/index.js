@@ -27,3 +27,6 @@ container.innerText = `
   some pseudo random values: [ ${fxrand()}, ${fxrand()}, ${fxrand()}, ${fxrand()}, ${fxrand()},... ]\n
 `
 document.body.prepend(container)
+
+import('../pkg')
+  .catch(console.error);

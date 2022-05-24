@@ -4,3 +4,7 @@ body {
   /* leave it to hide the scrollbars */
   overflow: hidden;
 }
+
+canvas {
+  image-rendering: pixelated;
+}

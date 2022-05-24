@@ -11,8 +11,10 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@wasm-tool/wasm-pack-plugin": "1.5.0",
     "adm-zip": "^0.5.9",
     "copy-webpack-plugin": "^9.0.1",
+    "text-encoding": "^0.7.0",
     "css-loader": "^6.4.0",
     "html-webpack-plugin": "^5.4.0",
     "style-loader": "^3.3.0",
