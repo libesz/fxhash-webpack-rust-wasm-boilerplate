@@ -24,8 +24,10 @@ You will need to have [nodejs](https://nodejs.org/) installed.
 
 Clone the repository on your machine and move to the directory
 ```sh
-$ git clone https://github.com/fxhash/fxhash-webpack-boilerplate.git your_folder && cd your_folder
+$ git clone https://github.com/libesz/fxhash-webpack-rust-wasm-boilerplate.git your_folder && cd your_folder
 ```
+
+Install Rust, `wasm-pack` and `wasm-bindgen` according to [this](https://rustwasm.github.io/docs/wasm-bindgen/) and [this](https://rustwasm.github.io/docs/book/game-of-life/setup.html) tutorials.
 
 Install the packages required for the local environment
 ```sh
