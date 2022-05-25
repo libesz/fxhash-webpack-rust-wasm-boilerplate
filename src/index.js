@@ -19,6 +19,12 @@ console.log(fxrand()) // deterministic PRNG function, use it instead of Math.ran
 //   "Number of lines": 10,
 //   "Inverted": true
 // }
+window.$fxhashFeatures = {
+  "BoolExample": false,
+  "NumberExample": 1.2,
+  "StringExample": "foo"
+}
+
 
 // this code writes the values to the DOM as an example
 const container = document.createElement("div")

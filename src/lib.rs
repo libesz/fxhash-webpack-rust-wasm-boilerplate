@@ -22,6 +22,15 @@ extern "C" {
 
     #[wasm_bindgen()]
     fn fxrand() -> f64;
+
+    #[wasm_bindgen(js_name = getFxHashFeature)]
+    fn getFxHashFeatureBool(name: &str) -> bool;
+
+    #[wasm_bindgen(js_name = getFxHashFeature)]
+    fn getFxHashFeatureNumber(name: &str) -> f64;
+
+    #[wasm_bindgen(js_name = getFxHashFeature)]
+    fn getFxHashFeatureString(name: &str) -> String;
 }
 
 #[derive(Copy, Clone)]
@@ -61,6 +70,9 @@ pub fn start() {
 }
 
 fn draw() {
+  let feature_string_example = getFxHashFeatureString("StringExample");
+  log(&*feature_string_example);
+
   let window = web_sys::window().unwrap();
   let document = window.document().unwrap();
   let canvas = document.get_element_by_id("canvas").unwrap();
