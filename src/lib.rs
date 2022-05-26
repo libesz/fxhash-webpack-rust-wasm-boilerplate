@@ -2,6 +2,7 @@ use std::f64;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::*;
+use std::panic;
 
 #[wasm_bindgen]
 extern "C" {
@@ -59,6 +60,8 @@ fn get_random_u8() -> u8 {
 
 #[wasm_bindgen(start)]
 pub fn start() {
+  panic::set_hook(Box::new(console_error_panic_hook::hook));
+
   let window = web_sys::window().unwrap();
 
   let closure = wasm_bindgen::closure::Closure::wrap(Box::new(move |e: web_sys::Event| {
