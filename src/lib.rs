@@ -23,6 +23,9 @@ extern "C" {
     #[wasm_bindgen()]
     fn fxrand() -> f64;
 
+    #[wasm_bindgen()]
+    fn fxpreview();
+
     #[wasm_bindgen(js_name = getFxHashFeature)]
     fn getFxHashFeatureBool(name: &str) -> bool;
 
@@ -61,12 +64,14 @@ pub fn start() {
   let closure = wasm_bindgen::closure::Closure::wrap(Box::new(move |e: web_sys::Event| {
     log("handling resize event");
     draw();
+    fxpreview();
   }) as Box<dyn FnMut(_)>);
   window
       .add_event_listener_with_callback("resize", closure.as_ref().unchecked_ref())
       .unwrap();
   closure.forget();
   draw();
+  fxpreview();
 }
 
 fn draw() {
