@@ -33,16 +33,19 @@
         console.log("fxhash: TRIGGER PREVIEW")
       }
 
-      function getFxHashFeature(name) {
-        return window.$fxhashFeatures[name]
-      }
-
       //---- /do not edit the following code
     </script>
 
     <link rel="stylesheet" href="./style.css">
 
     <!-- if you need to import js scripts do it here -->
+    <script>
+
+      function getFxHashFeature(name) {
+        return window.$fxhashFeatures[name]
+      }
+
+    </script>
   </head>
   <body>
     <canvas id="canvas"></canvas>
