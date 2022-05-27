@@ -1,8 +1,10 @@
 use std::f64;
+use wasm_bindgen::closure;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::*;
 use std::panic;
+use std::sync::{Arc, Mutex};
 
 #[wasm_bindgen]
 extern "C" {
@@ -53,10 +55,30 @@ impl Color {
   }
 }
 
-fn get_random_u8() -> u8 {
-  (fxrand() * 256.0).floor() as u8
+struct RandCache {
+  index: u32,
+  cache: Vec<u8>
 }
-
+impl RandCache {
+  pub fn new() -> RandCache {
+    RandCache { index: 0, cache: Vec::new() }
+  }
+  pub fn rewind(&mut self) {
+    self.index = 0;
+  }
+  pub fn get_u8(&mut self) -> u8 {
+    let result: u8;
+    match self.cache.get(self.index as usize) {
+      Some(result_from_cache) => result = *result_from_cache,
+      None => {result = RandCache::get_random_u8(); self.cache.push(result)},
+    }
+    self.index += 1;
+    result
+  }
+  fn get_random_u8() -> u8 {
+    (fxrand() * 256.0).floor() as u8
+  }
+}
 
 #[wasm_bindgen(start)]
 pub fn start() {
@@ -64,22 +86,26 @@ pub fn start() {
 
   let window = web_sys::window().unwrap();
 
-  let closure = wasm_bindgen::closure::Closure::wrap(Box::new(move |e: web_sys::Event| {
+  let rand_mutex = Arc::new(Mutex::new(RandCache::new()));
+  let closure_func = move || {
     log("handling resize event");
-    draw();
+    draw(&rand_mutex);
     fxpreview();
-  }) as Box<dyn FnMut(_)>);
+  };
+  // initial draw
+  closure_func();
+  let closure = closure::Closure::wrap(Box::new(closure_func) as Box<dyn FnMut()>);
   window
       .add_event_listener_with_callback("resize", closure.as_ref().unchecked_ref())
       .unwrap();
   closure.forget();
-  draw();
-  fxpreview();
 }
 
-fn draw() {
+fn draw(rand_cache: &Arc<Mutex<RandCache>>) {
   let feature_string_example = getFxHashFeatureString("StringExample");
   log(&*feature_string_example);
+  let mut unlocked_rand_cache = rand_cache.lock().unwrap();
+  unlocked_rand_cache.rewind();
 
   let window = web_sys::window().unwrap();
   let document = window.document().unwrap();
@@ -100,7 +126,7 @@ fn draw() {
   let height = window.inner_height().unwrap().as_f64().unwrap() as u32;
   canvas.set_height(height);
   canvas.set_width(width);
-  context.set_fill_style(&Color::from_rgb(get_random_u8(), get_random_u8(), get_random_u8()).to_string().into());
+  context.set_fill_style(&Color::from_rgb(unlocked_rand_cache.get_u8(), unlocked_rand_cache.get_u8(), unlocked_rand_cache.get_u8()).to_string().into());
   context.rect(0.0, 0.0, width.into(), height.into());
   context.fill();
 }
