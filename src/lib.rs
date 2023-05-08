@@ -59,12 +59,36 @@ struct RandCache {
   index: u32,
   cache: Vec<u8>
 }
+#[derive(Debug, Clone)]
+pub struct RandCacheError;
+
+impl core::fmt::Display for RandCacheError {
+  fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+      write!(f, "index is not available")
+  }
+}
+
 impl RandCache {
   pub fn new() -> RandCache {
     RandCache { index: 0, cache: Vec::new() }
   }
   pub fn rewind(&mut self) {
-    self.index = 0;
+    _ = self.rewind_to(0);
+  }
+  pub fn rewind_to(&mut self, index: u32) -> Result<u32, RandCacheError>{
+    match self.cache.get(index as usize) {
+      Some(_) => {
+        let original_index = self.index;
+        self.index = index;
+        Ok(original_index)
+      }
+      None => {
+        Err(RandCacheError)
+      },
+    }
+  }
+  pub fn get_cache_index(&self) -> u32 {
+    self.index
   }
   pub fn get_u8(&mut self) -> u8 {
     let result: u8;
