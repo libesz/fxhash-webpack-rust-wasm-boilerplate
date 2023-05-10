@@ -15,6 +15,7 @@
   "author": "fxhash",
   "license": "MIT",
   "dependencies": {
+    "@wasm-tool/wasm-pack-plugin": "1.5.0",
     "adm-zip": "^0.5.9",
     "chalk": "^4.1.2",
     "copy-webpack-plugin": "^11.0.0",
