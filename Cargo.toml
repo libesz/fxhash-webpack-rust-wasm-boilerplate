@@ -1,16 +1,17 @@
 [package]
-name = "canvas"
+name = "hello_world"
 version = "0.1.0"
 authors = ["The wasm-bindgen Developers"]
 edition = "2018"
 
 [lib]
 crate-type = ["cdylib"]
+path = "project/src/lib.rs"
 
 [dependencies]
+wasm-bindgen = "0.2.85"
 console_error_panic_hook = "0.1.7"
-js-sys = "0.3.61"
-wasm-bindgen = "0.2.84"
+hex = "0.4.3"
 
 [dependencies.web-sys]
 version = "0.3.61"
