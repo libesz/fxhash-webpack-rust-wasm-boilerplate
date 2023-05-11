@@ -113,6 +113,7 @@ ${$fx.stringifyParams($fx.getRawParams())}
 <pre style="color: white;">
 ${$fx.stringifyParams($fx.getRawParams())}
 </pre>
+<canvas id="canvas"></canvas>
 `
 
 // Note that a dynamic `import` statement here is required due to
@@ -120,6 +121,4 @@ ${$fx.stringifyParams($fx.getRawParams())}
 // will work here one day as well!
 const rust = import('../../pkg');
 
-rust
-  .then(m => m.greet('World!'))
-  .catch(console.error);
+rust.catch(console.error);
