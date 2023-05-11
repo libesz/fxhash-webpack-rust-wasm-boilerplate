@@ -1,5 +1,5 @@
-use core::fmt;
 use std::f64;
+use std::f64::consts::PI;
 use wasm_bindgen::closure;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
@@ -70,7 +70,7 @@ impl Color {
   }
   pub fn from_param(param_id: &str) -> Color {
     let mut color_string = getFxHashParamColor(param_id);
-    assert_eq!(color_string.len(), 7);
+    assert_eq!(color_string.len(), 9);
 
     _ = color_string.remove(0);
 
@@ -179,8 +179,6 @@ pub fn start() {
 }
 
 fn draw(rand_cache: &Arc<Mutex<RandCache>>) {
-  let feature_string_example = getFxHashFeatureString("A random string");
-  log(&format!("feature value: {}", &*feature_string_example));
   let mut unlocked_rand_cache = rand_cache.lock().unwrap();
   unlocked_rand_cache.rewind();
 
@@ -203,7 +201,19 @@ fn draw(rand_cache: &Arc<Mutex<RandCache>>) {
   let height = window.inner_height().unwrap().as_f64().unwrap() as u32;
   canvas.set_height(height);
   canvas.set_width(width);
-  context.set_fill_style(&Color::from_rgb(unlocked_rand_cache.get_u8(), unlocked_rand_cache.get_u8(), unlocked_rand_cache.get_u8()).to_string().into());
+
+  let bg_color = Color::from_param("color_id");
+  context.set_fill_style(&bg_color.to_string().into());
   context.rect(0.0, 0.0, width.into(), height.into());
+  context.fill();
+
+  let fg_color = Color::from_rgb(unlocked_rand_cache.get_u8(), unlocked_rand_cache.get_u8(), unlocked_rand_cache.get_u8());
+  context.set_fill_style(&fg_color.to_string().into());
+
+  context.begin_path();
+  match context.arc(width as f64 / 2.0, height as f64 / 2.0, height as f64 / 4.0, 0.0, 2.0 * PI) {
+    Ok(_) => {},
+    Err(e) => log(&e.as_string().unwrap()),
+  }
   context.fill();
 }
