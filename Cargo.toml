@@ -6,6 +6,7 @@ edition = "2018"
 
 [lib]
 crate-type = ["cdylib"]
+path = "project/src/lib.rs"
 
 [dependencies]
 wasm-bindgen = "0.2.85"
