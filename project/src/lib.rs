@@ -1,3 +1,4 @@
+use core::fmt;
 use std::f64;
 use wasm_bindgen::closure;
 use wasm_bindgen::prelude::*;
@@ -5,6 +6,7 @@ use wasm_bindgen::JsCast;
 use web_sys::*;
 use std::panic;
 use std::sync::{Arc, Mutex};
+use hex::FromHex;
 
 #[wasm_bindgen]
 extern "C" {
@@ -55,15 +57,54 @@ extern "C" {
 pub struct Color{
   red: u8,
   green: u8,
-  blue: u8
+  blue: u8,
+  alpha: u8
 }
 
 impl Color {
   pub fn from_rgb(red: u8, green: u8, blue: u8) -> Color {
-    Color{red: red, green: green, blue: blue}
+    Color{red: red, green: green, blue: blue, alpha: 255}
+  }
+  pub fn from_rgba(red: u8, green: u8, blue: u8, alpha: u8) -> Color {
+    Color{red: red, green: green, blue: blue, alpha: alpha}
+  }
+  pub fn from_param(param_id: &str) -> Color {
+    let mut color_string = getFxHashParamColor(param_id);
+    assert_eq!(color_string.len(), 7);
+
+    _ = color_string.remove(0);
+
+    let decoded = <[u8; 4]>::from_hex(color_string).expect("Decoding failed");
+
+    println!("{:?}", decoded);
+    Color{red: decoded[0], green: decoded[1], blue: decoded[2], alpha: decoded[3]}
   }
   pub fn to_string(self) -> String {
-  format!("rgb({}, {}, {})", self.red, self.green, self.blue)
+    format!("rgba({}, {}, {}, {})", self.red, self.green, self.blue, self.alpha as f64 / 256.0)
+  }
+  pub fn set_red(&mut self, value: u8) {
+    self.red = value;
+  }
+  pub fn set_green(&mut self, value: u8) {
+    self.green = value;
+  }
+  pub fn set_blue(&mut self, value: u8) {
+    self.blue = value;
+  }
+  pub fn set_alpha(&mut self, value: u8) {
+    self.alpha = value;
+  }
+  pub fn red(self) -> u8 {
+    self.red
+  }
+  pub fn green(self) -> u8 {
+    self.green
+  }
+  pub fn blue(self) -> u8 {
+    self.blue
+  }
+  pub fn alpha(self) -> u8 {
+    self.alpha
   }
 }
 
