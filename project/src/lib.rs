@@ -37,6 +37,18 @@ extern "C" {
 
     #[wasm_bindgen(js_name = getFxHashFeature)]
     fn getFxHashFeatureString(name: &str) -> String;
+
+    #[wasm_bindgen(js_name = getFxHashParam)]
+    fn getFxHashParamBool(name: &str) -> bool;
+
+    #[wasm_bindgen(js_name = getFxHashParam)]
+    fn getFxHashParamNumber(name: &str) -> f64;
+
+    #[wasm_bindgen(js_name = getFxHashParam)]
+    fn getFxHashParamString(name: &str) -> String;
+
+    #[wasm_bindgen(js_name = getFxHashParamColor)]
+    fn getFxHashParamColor(name: &str) -> String;
 }
 
 #[derive(Copy, Clone)]
